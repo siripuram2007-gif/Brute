@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRUTE.SHOP — Dress Brutal or Die</title>
+  <meta name="description" content="RAW DROPS 2025. No logos, no trends. Premium dark streetwear and brutal aesthetics for the unapologetic.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ 
+  <!-- GRAIN OVERLAY -->
+  <div class="grain-overlay"></div>
+ 
+  <!-- CURSOR -->
+  <div class="custom-cursor" id="cursor"></div>
+  <div class="custom-cursor-dot" id="cursor-dot"></div>
+ 
+  <!-- INTRO SPLASH SCREEN -->
+  <div class="intro-splash" id="intro-splash">
+    <div class="intro-logo">BRUTE<span class="logo-dot">.</span>SHOP</div>
+  </div>
+ 
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast">
+    <span class="toast-icon">✓</span>
+    <span id="toast-msg">Added to cart</span>
+  </div>
+ 
+  <!-- AUTH MODAL -->
+  <div class="modal-overlay" id="auth-overlay">
+    <div class="auth-modal glass-dark" id="auth-modal">
+      <button class="modal-close-btn" onclick="closeAuth()">✕</button>
+      <div id="auth-inner"></div>
+    </div>
+  </div>
+ 
+  <!-- PRODUCT MODAL -->
+  <div class="modal-overlay" id="product-overlay">
+    <div class="product-modal glass-dark" id="product-modal">
+      <button class="modal-close-btn" onclick="closeProductModal()">✕</button>
+      <div id="product-modal-inner"></div>
+    </div>
+  </div>
+
+  <!-- SIZE GUIDE MODAL -->
+  <div class="modal-overlay" id="size-guide-overlay">
+    <div class="auth-modal glass-dark" style="max-width: 600px;">
+      <button class="modal-close-btn" onclick="closeSizeGuide()">✕</button>
+      <h2 class="auth-title">SIZE GUIDE</h2>
+      <p class="auth-sub">Brutal apparel measurement standards (in inches)</p>
+      
+      <table class="size-table">
+        <thead>
+          <tr>
+            <th>SIZE</th>
+            <th>CHEST (IN)</th>
+            <th>LENGTH (IN)</th>
+            <th>SLEEVE (IN)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>S</strong></td>
+            <td>36 - 38</td>
+            <td>27</td>
+            <td>24.5</td>
+          </tr>
+          <tr>
+            <td><strong>M</strong></td>
+            <td>38 - 40</td>
+            <td>28</td>
+            <td>25</td>
+          </tr>
+          <tr>
+            <td><strong>L</strong></td>
+            <td>41 - 43</td>
+            <td>29</td>
+            <td>25.5</td>
+          </tr>
+          <tr>
+            <td><strong>XL</strong></td>
+            <td>44 - 46</td>
+            <td>30</td>
+            <td>26</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="size-guide-hint">Note: If you fall between sizes, select the larger size for a relaxed, brutal fit.</p>
+    </div>
+  </div>
+
+  <!-- ADDRESS FORM MODAL -->
+  <div class="modal-overlay" id="address-overlay">
+    <div class="auth-modal glass-dark">
+      <button class="modal-close-btn" onclick="closeAddressModal()">✕</button>
+      <h2 class="auth-title" id="address-modal-title">ADD ADDRESS</h2>
+      <p class="auth-sub" id="address-modal-subtitle">Save shipping details for fast checkout</p>
+      
+      <input type="hidden" id="address-edit-id">
+      <div class="auth-field">
+        <label>FULL NAME</label>
+        <input type="text" id="address-fullname" placeholder="Alex Rivera">
+      </div>
+      <div class="auth-field">
+        <label>PHONE NUMBER</label>
+        <input type="text" id="address-phone" placeholder="9876543210">
+      </div>
+      <div class="auth-field">
+        <label>STREET ADDRESS</label>
+        <input type="text" id="address-street" placeholder="Flat No. 101, Dark Void Towers">
+      </div>
+      <div class="auth-field">
+        <label>CITY</label>
+        <input type="text" id="address-city" placeholder="Mumbai">
+      </div>
+      <div class="auth-field">
+        <label>PINCODE / POSTCODE</label>
+        <input type="text" id="address-pincode" placeholder="400001">
+      </div>
+      <div class="auth-field">
+        <label>STATE</label>
+        <input type="text" id="address-state" placeholder="Maharashtra">
+      </div>
+      <button class="btn-primary" style="width:100%; margin-top:12px" onclick="saveAddress()">SAVE ADDRESS</button>
+    </div>
+  </div>
+
+  <!-- COMPARE MATRIX MODAL -->
+  <div class="modal-overlay" id="compare-overlay">
+    <div class="product-modal glass-dark" style="max-width: 90%; max-height: 85vh;">
+      <button class="modal-close-btn" onclick="closeCompareModal()">✕</button>
+      <h2 class="auth-title" style="padding: 24px 24px 0 24px; font-family: 'Bebas Neue', sans-serif;">PRODUCT COMPARISON</h2>
+      <div class="compare-table-wrap">
+        <table class="compare-table" id="compare-matrix-table">
+          <!-- Rendered dynamically -->
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX GALLERY MODAL -->
+  <div class="modal-overlay" id="lightbox-overlay" style="z-index: 300000;">
+    <button class="modal-close-btn" onclick="closeLightbox()" style="top:24px; right:24px; z-index:100000;">✕</button>
+    <div class="lightbox-wrap">
+      <button class="lightbox-nav prev" onclick="lightboxPrev()">←</button>
+      <div class="lightbox-img-container">
+        <img src="" id="lightbox-img" alt="Lightbox High Res View">
+      </div>
+      <button class="lightbox-nav next" onclick="lightboxNext()">→</button>
+    </div>
+    <div class="lightbox-counter" id="lightbox-counter">1 / 1</div>
+  </div>
+
+  <!-- SECURE CHECKOUT DRAW / MODAL -->
+  <div class="modal-overlay" id="checkout-overlay">
+    <div class="product-modal glass-dark" style="max-width: 860px; padding: 0;">
+      <button class="modal-close-btn" onclick="closeCheckout()" style="top: 16px; right: 16px;">✕</button>
+      
+      <div class="checkout-grid-layout">
+        <div class="checkout-form-side">
+          <h2 class="auth-title">SECURE CHECKOUT</h2>
+          <p class="auth-sub" style="margin-bottom: 24px;">Complete your purchase inside the void</p>
+          
+          <div class="checkout-section">
+            <h3 class="checkout-sec-title">1. SHIPPING ADDRESS</h3>
+            <div id="checkout-address-list"></div>
+            <button class="btn-ghost" onclick="openAddressModal()" style="margin-top:12px; padding: 10px; font-size:12px;">+ ADD NEW ADDRESS</button>
+          </div>
+          
+          <div class="checkout-section" style="margin-top:24px;">
+            <h3 class="checkout-sec-title">2. PROMO CODE</h3>
+            <div class="checkout-promo-row">
+              <input type="text" id="checkout-promo-input" placeholder="BRUTAL25, VOID10" class="promo-field">
+              <button class="btn-primary" style="padding: 12px 24px;" onclick="applyCheckoutPromo()">APPLY</button>
+            </div>
+            <div id="checkout-promo-message" style="margin-top: 6px; font-size: 13px;"></div>
+          </div>
+        </div>
+        
+        <div class="checkout-summary-side">
+          <h3 class="checkout-sec-title">ORDER SUMMARY</h3>
+          <div class="checkout-summary-list" id="checkout-summary-items"></div>
+          <div class="checkout-totals">
+            <div class="checkout-row"><span>SUBTOTAL</span><span id="checkout-subtotal">₹0</span></div>
+            <div class="checkout-row" id="checkout-discount-row" style="display:none; color: var(--red);"><span>DISCOUNT</span><span id="checkout-discount">-₹0</span></div>
+            <div class="checkout-row"><span>SHIPPING</span><span id="checkout-shipping">FREE</span></div>
+            <div class="checkout-row total"><span>TOTAL</span><span id="checkout-total">₹0</span></div>
+          </div>
+          
+          <button class="btn-checkout" style="width:100%; margin-top:24px;" onclick="proceedToPayment()">PLACE ORDER & PAY ₹<span id="checkout-pay-btn-text">0</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAZORPAY SIMULATED GATEWAY -->
+  <div class="modal-overlay" id="razorpay-overlay" style="z-index: 200000;">
+    <div class="razorpay-modal">
+      <div class="rzp-header">
+        <div class="rzp-logo">BRUTE<span class="logo-dot">.</span>SHOP</div>
+        <div class="rzp-amount">₹<span id="rzp-total-amount">0</span></div>
+      </div>
+      <div class="rzp-body">
+        <div class="rzp-merchant-info">
+          <p class="merchant-name">BRUTE APPAREL CO.</p>
+          <p class="order-desc" id="rzp-order-desc">Order BR789025</p>
+        </div>
+        <div class="rzp-payment-options">
+          <p class="rzp-section-title">PAYMENT METHODS</p>
+          <button class="rzp-pay-method" onclick="simulatePaymentProcessing('UPI')">
+            <span class="rzp-pay-icon">⚡</span>
+            <div class="rzp-pay-details">
+              <span class="rzp-pay-title">UPI / QR (GPay, PhonePe, BHIM)</span>
+              <span class="rzp-pay-sub">Pay instantly via secure UPI code</span>
+            </div>
+          </button>
+          <button class="rzp-pay-method" onclick="simulatePaymentProcessing('Card')">
+            <span class="rzp-pay-icon">💳</span>
+            <div class="rzp-pay-details">
+              <span class="rzp-pay-title">Card (Visa, Mastercard, RuPay, Amex)</span>
+              <span class="rzp-pay-sub">Debit or Credit card with OTP simulation</span>
+            </div>
+          </button>
+          <button class="rzp-pay-method" onclick="simulatePaymentProcessing('Netbanking')">
+            <span class="rzp-pay-icon">🏦</span>
+            <div class="rzp-pay-details">
+              <span class="rzp-pay-title">Net Banking</span>
+              <span class="rzp-pay-sub">Secure redirect to major Indian banks</span>
+            </div>
+          </button>
+          <button class="rzp-pay-method" onclick="simulatePaymentProcessing('COD')">
+            <span class="rzp-pay-icon">💵</span>
+            <div class="rzp-pay-details">
+              <span class="rzp-pay-title">Cash on Delivery (COD)</span>
+              <span class="rzp-pay-sub">Pay in cash upon doorstep delivery</span>
+            </div>
+          </button>
+        </div>
+      </div>
+      <div class="rzp-footer">
+        <span>🔒 Secure payments powered by Razorpay</span>
+        <button class="rzp-cancel" onclick="cancelRazorpay()">CANCEL</button>
+      </div>
+    </div>
+    
+    <!-- PAYMENT LOADER -->
+    <div class="payment-loader-overlay" id="payment-loader" style="display:none;">
+      <div class="payment-loader-spinner"></div>
+      <p>Processing Secure Payment via Razorpay...</p>
+      <p class="payment-loader-sub">Please do not close this window or refresh the page</p>
+    </div>
+  </div>
+ 
+  <!-- CART DRAWER -->
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <span class="cart-title">YOUR CART <span id="cart-badge">0</span></span>
+      <button onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-items-wrap" id="cart-items-list"></div>
+    <div class="cart-drawer-footer">
+      <div class="cart-summary">
+        <div class="cart-row"><span>SUBTOTAL</span><span id="cart-subtotal">₹0</span></div>
+        <div class="cart-row muted"><span>SHIPPING</span><span id="cart-shipping">FREE</span></div>
+        <div class="cart-row total"><span>TOTAL</span><span id="cart-total">₹0</span></div>
+      </div>
+      <button class="btn-checkout" onclick="openCheckout()">PROCEED TO CHECKOUT →</button>
+      <button class="btn-ghost" onclick="closeCart()">CONTINUE SHOPPING</button>
+    </div>
+  </div>
+  <div class="cart-overlay-bg" id="cart-overlay-bg" onclick="closeCart()"></div>
+ 
+  <!-- HEADER -->
+  <header id="main-header">
+    <div class="header-inner">
+      <div class="logo" onclick="showPage('home')">BRUTE<span class="logo-dot">.</span>SHOP</div>
+ 
+      <nav class="nav-links" id="desktop-nav">
+        <a href="#" class="nav-link active" data-page="home" onclick="navClick(event,'home')">HOME</a>
+        <a href="#" class="nav-link" data-page="shop" onclick="navClick(event,'shop')">SHOP</a>
+        <a href="#" class="nav-link" data-page="lookbook" onclick="navClick(event,'lookbook')">LOOKBOOK</a>
+        <a href="#" class="nav-link" data-page="wishlist" onclick="navClick(event,'wishlist')">WISHLIST</a>
+        <a href="#" class="nav-link" data-page="account" onclick="navClick(event,'account')">ACCOUNT</a>
+      </nav>
+ 
+      <div class="header-right">
+        <div class="search-wrapper">
+          <input class="search-input" id="search-input" type="text" placeholder="SEARCH…" autocomplete="off" oninput="handleSearchInput(this.value)" onfocus="expandSearch(true)" onblur="expandSearch(false)">
+          <span class="search-icon">⌕</span>
+          <!-- Live suggestions drop -->
+          <div class="search-suggestions-dropdown" id="search-suggestions" style="display:none;"></div>
+        </div>
+        <div id="auth-btn-area">
+          <button class="btn-text" onclick="openAuth('login')">LOGIN</button>
+          <button class="btn-text" onclick="openAuth('register')">REGISTER</button>
+        </div>
+        <div id="user-area" style="display:none">
+          <span class="user-name" id="user-greeting"></span>
+          <button class="btn-text danger" onclick="logout()">LOGOUT</button>
+        </div>
+        
+        <!-- Cart button wrapper for hover Mini Cart -->
+        <div class="cart-btn-wrapper" onmouseenter="toggleMiniCart(true)" onmouseleave="toggleMiniCart(false)">
+          <button class="cart-btn" onclick="openCart()">
+            <span class="cart-icon">⌗</span> CART
+            <span class="cart-count" id="cart-count">0</span>
+          </button>
+          
+          <!-- Mini Cart dropdown -->
+          <div class="mini-cart-dropdown glass-dark" id="mini-cart" style="display:none;">
+            <div class="mini-cart-header">RECENTLY ADDED</div>
+            <div class="mini-cart-list" id="mini-cart-list"></div>
+            <div class="mini-cart-footer">
+              <div class="mini-cart-total"><span>SUBTOTAL</span><span id="mini-cart-subtotal">₹0</span></div>
+              <button class="btn-primary btn-sm" onclick="openCart();toggleMiniCart(false);">VIEW CART</button>
+              <button class="btn-checkout btn-sm" style="margin-top:6px;" onclick="openCheckout();toggleMiniCart(false);">CHECKOUT NOW</button>
+            </div>
+          </div>
+        </div>
+        
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu" onclick="toggleMobileMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#" onclick="navClick(event,'home')">HOME</a>
+      <a href="#" onclick="navClick(event,'shop')">SHOP</a>
+      <a href="#" onclick="navClick(event,'lookbook')">LOOKBOOK</a>
+      <a href="#" onclick="navClick(event,'wishlist')">WISHLIST</a>
+      <a href="#" onclick="navClick(event,'account')">ACCOUNT</a>
+    </div>
+  </header>
+ 
+  <!-- PAGES -->
+  <main id="main-content">
+ 
+    <!-- HOME -->
+    <div id="home-page">
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero-bg">
+          <div class="hero-noise"></div>
+          <div class="marquee-bg">
+            <span>BRUTAL FASHION • RAW EDGE • NO COMPROMISE • DARK ENERGY • BRUTAL FASHION • RAW EDGE • NO COMPROMISE • DARK ENERGY • BRUTAL FASHION • RAW EDGE • </span>
+          </div>
+        </div>
+        <div class="hero-content reveal-up">
+          <div class="hero-eyebrow">— RAW DROP 2025 —</div>
+          <h1 class="hero-title" id="animated-hero-title">
+            <span class="hero-line" data-delay="0">DRESS</span>
+            <span class="hero-line red" data-delay="100">BRUTAL</span>
+            <span class="hero-line outline" data-delay="200">OR DIE.</span>
+          </h1>
+          <p class="hero-sub">No logos. No trends. Just pure, unapologetic fashion for those who refuse to blend in.</p>
+          <div class="hero-actions">
+            <button class="btn-primary" onclick="showPage('shop')">EXPLORE THE VAULT →</button>
+            <button class="btn-ghost-outline" onclick="showPage('lookbook')">VIEW LOOKBOOK</button>
+          </div>
+          <div class="hero-stats">
+            <div class="stat"><strong>2.4K+</strong><span>PIECES SOLD</span></div>
+            <div class="stat-divider"></div>
+            <div class="stat"><strong>4.9★</strong><span>AVG RATING</span></div>
+            <div class="stat-divider"></div>
+            <div class="stat"><strong>FREE</strong><span>SHIPPING ₹999+</span></div>
+          </div>
+        </div>
+        <div class="hero-image-col reveal-up">
+          <div class="hero-img-wrap">
+            <img src="assets/images/hero_product.png" alt="Obsidian Leather Jacket Hero Product" class="hero-img" loading="eager">
+            <div class="hero-img-badge">NEW</div>
+            <div class="hero-img-tag">OBSIDIAN LEATHER<br><strong>₹8,999</strong></div>
+          </div>
+        </div>
+      </section>
+   
+      <!-- FEATURED CATEGORIES -->
+      <section class="section categories-section">
+        <div class="section-heading reveal-up">
+          <div class="section-label">BROWSE BY</div>
+          <h2 class="section-title">CATEGORIES</h2>
+        </div>
+        <div class="cat-grid reveal-up">
+          <div class="cat-card" onclick="filterAndGo('Outerwear')">
+            <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&h=700&q=80" alt="Outerwear category image" loading="lazy">
+            <div class="cat-label">OUTERWEAR</div>
+          </div>
+          <div class="cat-card tall" onclick="filterAndGo('Tops')">
+            <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=600&h=900&q=80" alt="Tops category image" loading="lazy">
+            <div class="cat-label">TOPS</div>
+          </div>
+          <div class="cat-card" onclick="filterAndGo('Bottoms')">
+            <img src="https://images.unsplash.com/photo-1517462964-21fdcec3f25b?auto=format&fit=crop&w=600&h=700&q=80" alt="Bottoms category image" loading="lazy">
+            <div class="cat-label">BOTTOMS</div>
+          </div>
+          <div class="cat-card tall" onclick="filterAndGo('Footwear')">
+            <img src="https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=600&h=900&q=80" alt="Footwear category image" loading="lazy">
+            <div class="cat-label">FOOTWEAR</div>
+          </div>
+          <div class="cat-card" onclick="filterAndGo('Accessories')">
+            <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&h=700&q=80" alt="Accessories category image" loading="lazy">
+            <div class="cat-label">ACCESSORIES</div>
+          </div>
+        </div>
+      </section>
+   
+      <!-- FEATURED PRODUCTS -->
+      <section class="section">
+        <div class="section-heading reveal-up">
+          <div class="section-label">HANDPICKED</div>
+          <h2 class="section-title">FEATURED DROPS</h2>
+          <a href="#" class="see-all" onclick="showPage('shop');return false">VIEW ALL →</a>
+        </div>
+        <div class="product-grid reveal-up" id="featured-grid"></div>
+      </section>
+   
+      <!-- PROMO BANNER -->
+      <section class="promo-banner">
+        <div class="promo-inner reveal-up">
+          <div class="promo-text">
+            <div class="promo-eyebrow">LIMITED TIME</div>
+            <h2>FREE SHIPPING ON<br><span class="red">ORDERS ABOVE ₹999</span></h2>
+            <p>Use code <strong>BRUTAL25</strong> for 25% off your first order.</p>
+            <button class="btn-primary" onclick="showPage('shop')">SHOP NOW →</button>
+          </div>
+          <div class="promo-img">
+            <img src="https://images.unsplash.com/photo-1495105787522-5334e3ffa0ef?auto=format&fit=crop&w=600&h=400&q=80" alt="Promo collection image" loading="lazy">
+          </div>
+        </div>
+      </section>
+   
+      <!-- TESTIMONIALS -->
+      <section class="section">
+        <div class="section-heading reveal-up">
+          <div class="section-label">REVIEWS</div>
+          <h2 class="section-title">WHAT THEY SAY</h2>
+        </div>
+        <div class="reviews-grid reveal-up">
+          <div class="review-card glass-dark">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"The leather jacket is absolutely incredible. Quality is way above its price. Gets compliments everywhere I go."</p>
+            <div class="reviewer">— ARUN K., Mumbai</div>
+          </div>
+          <div class="review-card glass-dark featured-review">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"Finally a brand that doesn't follow trends. Brute makes you stand out without trying too hard. The cargo pants fit perfectly."</p>
+            <div class="reviewer">— SHRIYA M., Hyderabad</div>
+          </div>
+          <div class="review-card glass-dark">
+            <div class="review-stars">★★★★☆</div>
+            <p class="review-text">"Combat boots are built like tanks. Wore them for 3 months straight. Not a scratch. Highly recommend."</p>
+            <div class="reviewer">— RAHUL V., Delhi</div>
+          </div>
+        </div>
+      </section>
+   
+      <!-- RECENTLY VIEWED -->
+      <section class="section" id="rv-section" style="display:none">
+        <div class="section-heading reveal-up">
+          <div class="section-label">YOUR TRAIL</div>
+          <h2 class="section-title">RECENTLY VIEWED</h2>
+        </div>
+        <div class="product-grid reveal-up" id="rv-grid"></div>
+      </section>
+    </div>
+ 
+    <!-- SHOP PAGE -->
+    <div id="shop-page" style="display:none">
+      <div class="shop-banner">
+        <!-- BREADCRUMBS -->
+        <div class="breadcrumbs" id="shop-breadcrumbs">HOME > SHOP</div>
+        <h1 class="shop-title">THE <span class="red">VAULT</span></h1>
+        <p id="product-count-text"></p>
+      </div>
+      <div class="shop-layout">
+        <!-- SIDEBAR FILTERS -->
+        <aside class="filter-sidebar glass-dark" id="filter-sidebar">
+          <div class="filter-header">FILTERS <button class="clear-filters-btn" onclick="clearFilters()">CLEAR ALL</button></div>
+          <div class="filter-group">
+            <div class="filter-label">CATEGORY</div>
+            <div class="filter-options" id="cat-filters">
+              <button class="filter-chip active" onclick="setFilter('ALL',this)">ALL</button>
+              <button class="filter-chip" onclick="setFilter('Outerwear',this)">OUTERWEAR</button>
+              <button class="filter-chip" onclick="setFilter('Tops',this)">TOPS</button>
+              <button class="filter-chip" onclick="setFilter('Bottoms',this)">BOTTOMS</button>
+              <button class="filter-chip" onclick="setFilter('Footwear',this)">FOOTWEAR</button>
+              <button class="filter-chip" onclick="setFilter('Accessories',this)">ACCESSORIES</button>
+            </div>
+          </div>
+          <div class="filter-group">
+            <div class="filter-label">PRICE RANGE</div>
+            <div class="price-range-wrap">
+              <input type="range" id="price-min" min="0" max="10000" value="0" step="100" oninput="updatePriceFilter()">
+              <input type="range" id="price-max" min="0" max="10000" value="10000" step="100" oninput="updatePriceFilter()">
+              <div class="price-display">₹<span id="pmin">0</span> — ₹<span id="pmax">10,000</span></div>
+            </div>
+          </div>
+          <div class="filter-group">
+            <div class="filter-label">SORT BY</div>
+            <select class="filter-select" id="sort-select" onchange="setSort(this.value)">
+              <option value="default">DEFAULT</option>
+              <option value="price-asc">PRICE: LOW → HIGH</option>
+              <option value="price-desc">PRICE: HIGH → LOW</option>
+              <option value="name-asc">NAME: A → Z</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <div class="filter-label">VIEW</div>
+            <div class="view-toggle">
+              <button class="view-btn active" id="grid-view-btn" onclick="setView('grid')">▦ GRID</button>
+              <button class="view-btn" id="list-view-btn" onclick="setView('list')">☰ LIST</button>
+            </div>
+          </div>
+        </aside>
+        <!-- PRODUCT AREA -->
+        <div class="shop-main">
+          <div class="shop-toolbar">
+            <span id="product-count" class="count-tag"></span>
+            <button class="mobile-filter-btn" onclick="toggleMobileFilters()">⊞ FILTERS</button>
+          </div>
+          <div class="product-grid" id="product-grid"></div>
+          
+          <!-- PAGINATION / INFINITE LOAD -->
+          <div class="load-more-container" id="load-more-container">
+            <button class="btn-ghost-outline" id="load-more-btn" onclick="loadMoreProducts()">LOAD MORE PIECES</button>
+          </div>
+          
+          <div class="no-results" id="no-results" style="display:none">
+            <div class="no-results-icon">◯</div>
+            <p>No products found. Try different filters.</p>
+            <button class="btn-primary" onclick="clearFilters()">CLEAR FILTERS</button>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- LOOKBOOK PAGE -->
+    <div id="lookbook-page" style="display:none">
+      <div class="shop-banner">
+        <h1 class="shop-title">LOOK<span class="red">BOOK</span></h1>
+        <p>SS 2025 — The Brutalist Collection</p>
+      </div>
+      <div class="lookbook-grid" id="lookbook-grid"></div>
+    </div>
+ 
+    <!-- WISHLIST PAGE -->
+    <div id="wishlist-page" style="display:none">
+      <div class="shop-banner" style="position: relative;">
+        <h1 class="shop-title">YOUR <span class="red">WISHLIST</span></h1>
+        <button class="btn-ghost-outline" id="share-wishlist-btn" onclick="shareWishlist()" style="position: absolute; right: 24px; bottom: 20px; padding: 10px 18px; font-size: 13px;">🔗 SHARE WISHLIST</button>
+      </div>
+      <div class="product-grid" id="wishlist-grid"></div>
+      <div class="empty-state" id="wishlist-empty" style="display:none">
+        <div class="empty-icon">♡</div>
+        <p>Your wishlist is empty.</p>
+        <button class="btn-primary" onclick="showPage('shop')">START SHOPPING →</button>
+      </div>
+    </div>
+ 
+    <!-- ACCOUNT & ORDERS PAGE -->
+    <div id="account-page" style="display:none">
+      <div class="shop-banner">
+        <h1 class="shop-title">YOUR <span class="red">ACCOUNT</span></h1>
+      </div>
+      
+      <div class="account-layout">
+        <div class="account-tabs">
+          <button class="account-tab-btn active" id="tab-orders" onclick="switchAccountTab('orders')">ORDER HISTORY</button>
+          <button class="account-tab-btn" id="tab-addresses" onclick="switchAccountTab('addresses')">SAVED ADDRESSES</button>
+        </div>
+        
+        <div id="account-orders-section" class="account-tab-content">
+          <div id="orders-list"></div>
+          <div class="empty-state" id="orders-empty" style="display:none">
+            <div class="empty-icon">◫</div>
+            <p>No orders yet.</p>
+            <button class="btn-primary" onclick="showPage('shop')">SHOP NOW →</button>
+          </div>
+        </div>
+        
+        <div id="account-addresses-section" class="account-tab-content" style="display:none">
+          <div class="address-header">
+            <h3>SAVED SHIPPING ADDRESSES</h3>
+            <button class="btn-primary" style="padding: 10px 16px; font-size:12px;" onclick="openAddressModal()">+ ADD NEW</button>
+          </div>
+          <div class="address-grid" id="address-grid"></div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- SUCCESS PAGE -->
+    <div id="success-page" style="display:none">
+      <div class="success-wrap">
+        <div class="success-icon">✓</div>
+        <h1>ORDER PLACED!</h1>
+        <p id="success-order-id"></p>
+        <p class="success-sub">We've received your payment via Razorpay. Estimated delivery: 3-5 business days.</p>
+        <button class="btn-primary" onclick="showPage('account')">VIEW ORDER HISTORY →</button>
+      </div>
+    </div>
+ 
+  </main>
+ 
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo footer-logo" onclick="showPage('home')">BRUTE<span class="logo-dot">.</span>SHOP</div>
+        <p>No logos. No trends. Just raw, unfiltered fashion for those who refuse to be ordinary.</p>
+        <div class="social-links">
+          <a href="#" class="social-btn">IG</a>
+          <a href="#" class="social-btn">TW</a>
+          <a href="#" class="social-btn">YT</a>
+          <a href="#" class="social-btn">TK</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>SHOP</h4>
+        <a href="#" onclick="filterAndGo('Outerwear')">Outerwear</a>
+        <a href="#" onclick="filterAndGo('Tops')">Tops</a>
+        <a href="#" onclick="filterAndGo('Bottoms')">Bottoms</a>
+        <a href="#" onclick="filterAndGo('Footwear')">Footwear</a>
+        <a href="#" onclick="filterAndGo('Accessories')">Accessories</a>
+      </div>
+      <div class="footer-col">
+        <h4>HELP</h4>
+        <a href="#" onclick="openSizeGuide(); return false;">Size Guide</a>
+        <a href="#">Returns & Exchanges</a>
+        <a href="#">Shipping Policy</a>
+        <a href="#" onclick="showPage('account'); return false;">Track My Order</a>
+        <a href="#">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>NEWSLETTER</h4>
+        <p style="font-size:13px;margin-bottom:12px">Get early access to drops and exclusive offers.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="YOUR EMAIL" id="newsletter-email">
+          <button onclick="subscribeNewsletter()" aria-label="Subscribe newsletter">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 BRUTE.SHOP. ALL RIGHTS RESERVED.</span>
+      <span>PRIVACY POLICY · TERMS OF SERVICE</span>
+    </div>
+  </footer>
+
+  <!-- MOBILE BOTTOM NAV BAR -->
+  <div class="mobile-bottom-nav">
+    <button class="mob-nav-btn active" id="mob-btn-home" onclick="navClick(event, 'home')">
+      <span class="mob-icon">⌂</span>
+      <span class="mob-text">HOME</span>
+    </button>
+    <button class="mob-nav-btn" id="mob-btn-shop" onclick="navClick(event, 'shop')">
+      <span class="mob-icon">⌕</span>
+      <span class="mob-text">SHOP</span>
+    </button>
+    <button class="mob-nav-btn" id="mob-btn-wishlist" onclick="navClick(event, 'wishlist')">
+      <span class="mob-icon">♡</span>
+      <span class="mob-text">WISHLIST</span>
+    </button>
+    <button class="mob-nav-btn" id="mob-btn-cart" onclick="openCart()">
+      <span class="mob-icon">⌗</span>
+      <span class="mob-text">CART</span>
+    </button>
+    <button class="mob-nav-btn" id="mob-btn-account" onclick="navClick(event, 'account')">
+      <span class="mob-icon">👤</span>
+      <span class="mob-text">ACCOUNT</span>
+    </button>
+  </div>
+
+  <!-- STICKY COMPARISON TRAY -->
+  <div class="compare-bar" id="compare-bar" style="display:none;">
+    <div class="compare-bar-inner">
+      <div class="compare-items-thumbs" id="compare-thumbs"></div>
+      <div class="compare-actions">
+        <button class="btn-primary btn-sm" onclick="openCompareModal()">COMPARE (<span id="compare-count-badge">0</span>)</button>
+        <button class="btn-text danger" style="padding:4px 8px; font-size:12px;" onclick="clearCompare()">CLEAR</button>
+      </div>
+    </div>
+  </div>
+ 
+  <script src="script.js"></script>
+</body>
+</html>
